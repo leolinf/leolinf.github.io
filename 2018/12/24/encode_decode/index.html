@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="python," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="字节与字符计算机存储的一切数据，文本字符、图片、视频、音频、软件都是由一串01的字节序列构成的，一个字节等于8个比特位。 而字符就是一个符号，比如一个汉字、一个英文字母、一个数字、一个标点都可以称为一个字符。 字节方便存储和网络传输，而字符用于显示，方便阅读。例如字符 “p” 存储到硬盘是一串二进制数据 01110000，占用一个字节的长度 编码与解码先记住，任何信息，存放在存储介质中时，都是二进">
+<meta name="keywords" content="python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python 编码问题">
+<meta property="og:url" content="https://clubpy.top/2018/12/24/encode_decode/index.html">
+<meta property="og:site_name" content="leolinf 的博客">
+<meta property="og:description" content="字节与字符计算机存储的一切数据，文本字符、图片、视频、音频、软件都是由一串01的字节序列构成的，一个字节等于8个比特位。 而字符就是一个符号，比如一个汉字、一个英文字母、一个数字、一个标点都可以称为一个字符。 字节方便存储和网络传输，而字符用于显示，方便阅读。例如字符 “p” 存储到硬盘是一串二进制数据 01110000，占用一个字节的长度 编码与解码先记住，任何信息，存放在存储介质中时，都是二进">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-10-31T02:11:03.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python 编码问题">
+<meta name="twitter:description" content="字节与字符计算机存储的一切数据，文本字符、图片、视频、音频、软件都是由一串01的字节序列构成的，一个字节等于8个比特位。 而字符就是一个符号，比如一个汉字、一个英文字母、一个数字、一个标点都可以称为一个字符。 字节方便存储和网络传输，而字符用于显示，方便阅读。例如字符 “p” 存储到硬盘是一串二进制数据 01110000，占用一个字节的长度 编码与解码先记住，任何信息，存放在存储介质中时，都是二进">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://clubpy.top/2018/12/24/encode_decode/"/>
+
+
+
+
+
+  <title>python 编码问题 | leolinf 的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">leolinf 的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">人生苦短我用 py</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://clubpy.top/2018/12/24/encode_decode/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="linfan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="leolinf 的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">python 编码问题</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-24T11:14:47+08:00">
+                2018-12-24
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2019-10-31T10:11:03+08:00">
+                2019-10-31
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/12/24/encode_decode/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/12/24/encode_decode/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/12/24/encode_decode/" class="leancloud_visitors" data-flag-title="python 编码问题">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="字节与字符"><a href="#字节与字符" class="headerlink" title="字节与字符"></a>字节与字符</h2><p>计算机存储的一切数据，文本字符、图片、视频、音频、软件都是由一串01的字节序列构成的，一个字节等于8个比特位。</p>
+<p>而字符就是一个符号，比如一个汉字、一个英文字母、一个数字、一个标点都可以称为一个字符。</p>
+<p>字节方便存储和网络传输，而字符用于显示，方便阅读。例如字符 “p” 存储到硬盘是一串二进制数据 <code>01110000</code>，占用一个字节的长度</p>
+<h2 id="编码与解码"><a href="#编码与解码" class="headerlink" title="编码与解码"></a>编码与解码</h2><p>先记住，任何信息，存放在存储介质中时，都是二进制流（比特流）。</p>
+<ul>
+<li><strong>编码过程</strong>： 字符转换成二进制流表示的过程。</li>
+<li><strong>解码过程</strong>： 二进制流转换成字符的过程。</li>
+<li><strong>编码规则</strong>： 编码和解码过程中遵循的规则，例如GBK编码，UTF-8编码。</li>
+</ul>
+<h2 id="字符编码的来龙去脉"><a href="#字符编码的来龙去脉" class="headerlink" title="字符编码的来龙去脉"></a>字符编码的来龙去脉</h2><p>早期：ASCII 美国信息交换标准代码，最早的通用编码方案。发现不够用了，各自有各自的标准，如：(中国的 GBK, ANSI 美国国家标准协会认可的标准等</p>
+<p>后面：unicode/ucs 统一字符，可能是Unicode名字好记，所以采用更为广泛。</p>
+<p>GBK，GB2312，Latin-1，Big-5，ASCII等，它们的字符集和具体编码实现方式绑定（如GBK字符集就采用GBK编码方式），即字符和存储在介质上的二进制流一一对应。缺陷很明显，字符集扩展性差</p>
+<p>Unicode解决了字符和二进制的对应关系，但是使用unicode表示一个字符，太浪费空间。例如：利用unicode表示“Python”需要12个字节才能表示，比原来ASCII表示增加了1倍。</p>
+<p>由于计算机的内存比较大，并且字符串在内容中表示时也不会特别大，所以内容可以使用unicode来处理，但是存储和网络传输时一般数据都会非常多，那么增加1倍将是无法容忍的!</p>
+<p>为了解决存储和网络传输的问题，出现了Unicode Transformation Format，学术名UTF，即：对unicode中的进行转换，以便于在存储和网络传输时可以节省空间!</p>
+<ul>
+<li>UTF-8： 使用1、2、3、4个字节表示所有字符；优先使用1个字符、无法满足则使增加一个字节，最多4个字节。英文占1个字节、欧洲语系占2个、东亚占3个，其它及特殊字符占4个</li>
+<li>UTF-16： 使用2、4个字节表示所有字符；优先使用2个字节，否则使用4个字节表示。</li>
+<li>UTF-32： 使用4个字节表示所有字符；</li>
+</ul>
+<p>总结：<strong>UTF 是为unicode编码设计的一种在存储和传输时节省空间的编码方案。</strong></p>
+<h2 id="乱码"><a href="#乱码" class="headerlink" title="乱码"></a>乱码</h2><p><strong>编码和解码时用了不同或者不兼容的字符编码方式。</strong>就算同是Unicode，UTF-8和UTF-16也是不同的。</p>
+<p><strong>解决乱码问题，需要把握的要点</strong>：</p>
+<ul>
+<li><strong>输入某软件系统时字符所采用的编码是什么？</strong>（从数据库或文件读取时，原来存储时的编码是什么？从网页抓取时，网页的编码是什么？从控制台输入时，控制台的编码方式是什么？）</li>
+<li><strong>软件系统中的编码方式是什么？</strong>（原本若是UTF-8存储，GBK编码的软件系统该如何处理？）</li>
+<li><strong>输出时的编码方式是什么？</strong>（如Python脚本处理后的字符串是Unicode编码，输出到采用GBK编码的Windows控制台时应该做什么？）</li>
+</ul>
+<p>经常遇到的乱码问题：</p>
+<p>Windows 的 cmd 是GBK，Linux 的 bash 是UTF-8。PyCharm 自带的shell不管是Windows还是Linux都是UTF-8</p>
+<h2 id="py2"><a href="#py2" class="headerlink" title="py2:"></a>py2:</h2><p>python2它的默认编码是ASCII，想写中文，就必须声明文件头的coding为gbk or utf-8, 声明之后，</p>
+<p>python2解释器仅以文件头声明的编码去解释你的代码，加载到内存后，并不会主动帮你转为unicode,也就是说，你的文件编码是utf-8,加载到内存里，你的变量字符串就也是utf-8, 这意味着什么你以utf-8编码的文件，在windows是乱码。</p>
+<p>PY2中几个字符串相关的标识</p>
+<p><strong>str</strong>: 字符串类型与其叫<strong>字符串</strong>，不如叫<strong>字节串bytes</strong>     bytes == str 结果为<code>True</code>，用下标去访问的每一个元素都是一个<strong>字节</strong>。</p>
+<p><strong>unicode</strong>: 类型才是真正意义上的<strong>字符串</strong>，用下标去访问的每一个元素都是一个<strong>字符</strong>(虽然底下可能每个字符长度不同)。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">unicode(xxx)  unicode 方法默认的ASCII编码去解码xxx对应的编码的字符，相当于 xxx.decode()</span><br><span class="line">unicode(xxx, <span class="string">'utf-8'</span>) unicode 方法utf<span class="number">-8</span>编码去解码xxx对应的编码的字符, 相当于 xxx.decode(<span class="string">'utf-8'</span>)</span><br><span class="line">str(xxx) 类似于 xxx.encode(‘ascii’)</span><br></pre></td></tr></table></figure>
+<p><strong>encode 与 decode 方法</strong>:</p>
+<p>encode的作用是将unicode对象（没有某种具体编码）字串按encoding参数给定的编码方式<strong>编码</strong>成为str对象（具有某种具体编码）字串。故而用str对象调用encode方法是错误的</p>
+<p>decode的作用是将str对象字串（某种具体编码的）按照encoding参数给定的编码方式<strong>解码</strong>成unicode对象。故而用unicode对象调用decode方法是错误的</p>
+<p>Python2 ： <code>str</code>–(decode)–&gt; <code>unicode</code> –(encode)–&gt; <code>str</code></p>
+<h2 id="py3"><a href="#py3" class="headerlink" title="py3:"></a>py3:</h2><p>python3 执行代码的过程</p>
+<ol>
+<li>解释器找到代码文件，把代码字符串按文件头定义的编码加载到内存，转成unicode</li>
+<li>把代码字符串按照语法规则进行解释，</li>
+<li>所有的变量字符都会以unicode编码声明</li>
+</ol>
+<p>PY3 除了把字符串的编码改成了unicode, 还把str 和bytes 做了明确区分，</p>
+<p><strong>str</strong>: 就是unicode格式的字符</p>
+<p><strong>bytes</strong>: 就是单纯二进制字节序列</p>
+<p>在py3里，把unicode编码后，字符串就变成了bytes格式, 就是想通过这样的方式明确的告诉你，想在py3里看字符，必须得是unicode编码，其它编码一律按bytes格式展示。 </p>
+<p>Python3 ： <code>bytes</code> –(decode)–&gt; <code>str</code> –(encode)–&gt; <code>bytes</code></p>
+<p>看看关于 thrift 接口中文编码问题(具体看源码和测试)：</p>
+<p>thrift 0.7.0 版本，string 传递只许是 str 对象，而不能是 unicode 对象，ttypes.py 直接传递数据给下层</p>
+<p>thrift 0.11.0 版本，string 传递只许是 unicode 对象，而不能是 str 对象，ttypes.py 会对 unicode 统一编码成 utf-8</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    linfan
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://clubpy.top/2018/12/24/encode_decode/" title="python 编码问题">https://clubpy.top/2018/12/24/encode_decode/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/16/redis/" rel="next" title="redis 相关学习记录">
+                <i class="fa fa-chevron-left"></i> redis 相关学习记录
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/29/thrift/" rel="prev" title="thrift 深入理解">
+                thrift 深入理解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">linfan</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/leolinf" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="funlin.py@foxmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#字节与字符"><span class="nav-number">1.</span> <span class="nav-text">字节与字符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编码与解码"><span class="nav-number">2.</span> <span class="nav-text">编码与解码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符编码的来龙去脉"><span class="nav-number">3.</span> <span class="nav-text">字符编码的来龙去脉</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#乱码"><span class="nav-number">4.</span> <span class="nav-text">乱码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#py2"><span class="nav-number">5.</span> <span class="nav-text">py2:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#py3"><span class="nav-number">6.</span> <span class="nav-text">py3:</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">linfan</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://linfan.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://clubpy.top/2018/12/24/encode_decode/';
+          this.page.identifier = '2018/12/24/encode_decode/';
+          this.page.title = 'python 编码问题';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://linfan.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("LUzXUpQ7OlcbPkVFjQkC5HfS-gzGzoHsz", "nw0Cmekguy8BRD72oekQYYYE");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script>
+
+
+  
+
+</body>
+</html>
